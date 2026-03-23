@@ -389,6 +389,219 @@ canvas { width: 100% !important; display: block; border-radius: 6px; }
     min-width: 70px;
   }
 }
+
+/* ─── ALMOST-APP MOBILE UX ─── */
+@media (max-width: 768px) {
+  html, body {
+    overscroll-behavior-y: none;
+  }
+
+  body {
+    font-size: 14px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .topbar {
+    padding: calc(0.65rem + env(safe-area-inset-top, 0px)) 1rem 0.65rem;
+    gap: 0.75rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    backdrop-filter: blur(10px);
+  }
+
+  .topbar > div:first-child {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .topbar-title {
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+
+  .topbar-sub {
+    margin-top: 0.15rem;
+    font-size: 0.68rem;
+    line-height: 1.45;
+  }
+
+  .progress-pill {
+    order: 3;
+    margin-left: 0;
+    width: 100%;
+    padding: 0.5rem 0.85rem;
+    border-radius: 999px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .progress-bar-wrap {
+    margin-left: auto;
+    width: 56px;
+    height: 5px;
+    margin-top: 0.5rem;
+  }
+
+  .layout {
+    display: block;
+    min-height: auto;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    position: sticky;
+    top: calc(64px + env(safe-area-inset-top, 0px));
+    z-index: 180;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 0.55rem 0.75rem;
+    display: flex;
+    gap: 0.55rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    background: rgba(24, 23, 20, 0.96);
+    backdrop-filter: blur(8px);
+  }
+
+  .sidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sidebar-label {
+    display: none;
+  }
+
+  .nav-item {
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.62rem 0.9rem;
+    border-left: none;
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    background: var(--bg3);
+    font-size: 0.76rem;
+    line-height: 1.2;
+    scroll-snap-align: center;
+  }
+
+  .nav-item.active {
+    border-left-color: transparent;
+    border-color: var(--gold);
+    color: var(--gold2);
+    background: rgba(212,168,75,0.12);
+    box-shadow: inset 0 -2px 0 rgba(240,200,120,0.35);
+  }
+
+  .nav-num {
+    min-width: auto;
+    font-size: 0.64rem;
+    padding-top: 0;
+  }
+
+  .main {
+    overflow: visible;
+    min-width: 0;
+  }
+
+  .chapter {
+    max-width: none;
+    padding: 1.15rem 1rem calc(1.75rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .ch-title {
+    font-size: 2rem;
+  }
+
+  .ch-sub {
+    font-size: 0.8rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .ch-divider {
+    margin-bottom: 1.35rem;
+  }
+
+  .ideas,
+  .cards,
+  .overview-grid,
+  .fabric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fabric-grid {
+    gap: 0.5rem;
+  }
+
+  .bar-row {
+    gap: 0.5rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .bar-label {
+    min-width: 100%;
+    margin-bottom: 0.1rem;
+  }
+
+  .bar-val {
+    min-width: auto;
+    margin-left: auto;
+  }
+
+  .data-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .timeline {
+    padding-left: 1.2rem;
+  }
+
+  .ch-nav {
+    position: sticky;
+    bottom: 0;
+    z-index: 120;
+    margin: 2rem -1rem -1.75rem;
+    padding: 0.8rem 1rem calc(0.9rem + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(to top, rgba(15,14,12,0.98), rgba(15,14,12,0.9), rgba(15,14,12,0.65));
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border);
+  }
+
+  .nav-btn {
+    min-height: 42px;
+    padding: 0.65rem 0.9rem;
+    border-radius: 12px;
+    font-size: 0.76rem;
+  }
+
+  .slider-row {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .slider-row label {
+    width: 100%;
+  }
+
+  canvas {
+    max-width: 100%;
+    height: auto !important;
+  }
+
+  .quote {
+    margin-bottom: 1rem;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -409,7 +622,7 @@ canvas { width: 100% !important; display: block; border-radius: 6px; }
 <div class="layout">
 
 <!-- SIDEBAR -->
-<nav class="sidebar">
+<nav class="sidebar" id="chapterNav" aria-label="Навігація розділами">
   <div class="sidebar-label">Огляд</div>
   <div class="nav-item active" onclick="goTo(0)"><span class="nav-num">∞</span>Всі розділи</div>
   <div class="sidebar-label">Вступ</div>
@@ -432,7 +645,7 @@ canvas { width: 100% !important; display: block; border-radius: 6px; }
 </nav>
 
 <!-- MAIN -->
-<main class="main">
+<main class="main" id="mainContent">
 
 <!-- ===== OVERVIEW ===== -->
 <div class="chapter active" id="ch-0">
@@ -660,10 +873,10 @@ canvas { width: 100% !important; display: block; border-radius: 6px; }
   <div class="sec">Симулятор теплового навантаження</div>
   <div class="viz">
     <div class="viz-label">Розрахунок ризику теплового удару</div>
-    <div class="slider-row"><label>Температура повітря (°F):</label><input type="range" min="70" max="120" value="95" id="temp-sl" oninput="calcHeat()"><output id="temp-out">95°F</output></div>
-    <div class="slider-row"><label>Вологість (%):</label><input type="range" min="10" max="100" value="60" id="hum-sl" oninput="calcHeat()"><output id="hum-out">60%</output></div>
-    <div class="slider-row"><label>Навантаження (наплічник, фунти):</label><input type="range" min="0" max="80" value="40" id="load-sl" oninput="calcHeat()"><output id="load-out">40 lbs</output></div>
-    <div style="margin-top:0.75rem; padding:0.75rem; background:var(--bg3); border-radius:6px; font-size:0.88rem" id="heat-result"></div>
+    <div class="slider-row"><label>Температура повітря (°C):</label><input type="range" min="20" max="50" value="35" id="temp-sl" oninput="calcHeat()"><output id="temp-out">35°C</output></div>
+    <div class="slider-row"><label>Вологість (%):</label><input type="range" min="10" max="100" value="55" id="hum-sl" oninput="calcHeat()"><output id="hum-out">55%</output></div>
+    <div class="slider-row"><label>Навантаження (спорядження, кг):</label><input type="range" min="0" max="40" value="20" id="load-sl" oninput="calcHeat()"><output id="load-out">20 кг</output></div>
+    <div style="margin-top:0.75rem; padding:0.75rem; background:var(--bg3); border-radius:6px; font-size:0.88rem" id="heat-result"></div><p id="wbgt-note" style="margin-top:0.55rem; font-size:0.72rem; color:var(--text3)">Орієнтовний WBGT-like індекс: враховує температуру, вологість і додатковий вплив ваги спорядження. Це наочна модель для атласу, а не медичний прилад.</p>
   </div>
   <div class="ch-nav"><button class="nav-btn" onclick="goTo(6)">← Розділ 6</button><button class="nav-btn" onclick="goTo(8)">Розділ 8 →</button></div>
 </div>
@@ -902,6 +1115,7 @@ function goTo(n) {
   if (n === 7) calcHeat();
   if (n === 12) initDepth();
   if (n === 13) calcSleep();
+  centerActiveNav();
 }
 
 // ─── Overview grid ───
@@ -1127,20 +1341,44 @@ function updateDB() {
 
 // ─── Heat calc ───
 function calcHeat() {
-  const t = parseInt(document.getElementById('temp-sl').value);
-  const h = parseInt(document.getElementById('hum-sl').value);
-  const l = parseInt(document.getElementById('load-sl').value);
-  document.getElementById('temp-out').textContent = t + '°F';
+  const t = parseInt(document.getElementById('temp-sl').value, 10);   // °C
+  const h = parseInt(document.getElementById('hum-sl').value, 10);    // %
+  const l = parseInt(document.getElementById('load-sl').value, 10);   // кг
+
+  document.getElementById('temp-out').textContent = t + '°C';
   document.getElementById('hum-out').textContent = h + '%';
-  document.getElementById('load-out').textContent = l + ' lbs';
-  const hi = t + 0.33 * (h - 40);
-  const risk = hi + l * 0.3;
+  document.getElementById('load-out').textContent = l + ' кг';
+
+  // WBGT-like: спрощена наочна модель, натхненна підходами військових до теплового ризику.
+  // Крок 1. Оцінимо "вологий" термоефект за температурою і вологістю.
+  const wetEffect = 0.393 * t + 0.019 * h + 5.6; // близький індикатор відчутного перегріву
+  // Крок 2. Додамо вплив спорядження: важча вага підвищує теплове навантаження.
+  const loadAdj = l * 0.12; // +1.2°C на кожні 10 кг спорядження
+  const wbgtLike = 0.7 * wetEffect + 0.3 * t + loadAdj;
+
   let level, color, advice;
-  if (risk > 180) { level = 'Критичний: тепловий удар вірогідний'; color = 'var(--red)'; advice = 'Зупинити навчання. Охолодження водою та льодом.'; }
-  else if (risk > 140) { level = 'Небезпечний: теплова немоч'; color = 'var(--amber)'; advice = 'Зменшити темп. Моніторинг ректальної температури.'; }
-  else if (risk > 110) { level = 'Попередження: слідкуйте за симптомами'; color = 'var(--amber)'; advice = 'Збільшити перерви, рясне пиття.'; }
-  else { level = 'Помірний ризик'; color = 'var(--teal)'; advice = 'Стандартні протоколи гідратації.'; }
-  document.getElementById('heat-result').innerHTML = `<span style="color:${color}; font-weight:500">${level}</span><br><span style="color:var(--text3); font-size:0.78rem">${advice} (Індекс спеки: ${Math.round(hi)}°F + навантаження)</span>`;
+  if (wbgtLike >= 33) {
+    level = 'Критичний: тепловий удар вірогідний';
+    color = 'var(--red)';
+    advice = 'Негайно знизити навантаження, перейти в тінь, активно охолоджувати тіло, дати воду й контролювати симптоми.';
+  } else if (wbgtLike >= 30) {
+    level = 'Небезпечний: дуже високий ризик перегріву';
+    color = 'var(--amber)';
+    advice = 'Скоротити роботу, робити довгі перерви, послабити спорядження, уважно стежити за запамороченням і слабкістю.';
+  } else if (wbgtLike >= 27) {
+    level = 'Попередження: високий ризик';
+    color = 'var(--amber)';
+    advice = 'Часті перерви, активна гідратація, контроль темпу та стану.';
+  } else {
+    level = 'Помірний ризик';
+    color = 'var(--teal)';
+    advice = 'Стандартний режим гідратації і планові перерви за збереження самопочуття.';
+  }
+
+  document.getElementById('heat-result').innerHTML =
+    `<span style="color:${color}; font-weight:500">${level}</span><br>` +
+    `<span style="color:var(--text3); font-size:0.78rem">${advice} ` +
+    `(WBGT-like: ${wbgtLike.toFixed(1)}°C)</span>`;
 }
 
 // ─── Depth bars ───
@@ -1180,9 +1418,75 @@ window.addEventListener('orientationchange', () => {
   }, 120);
 });
 
+
+function centerActiveNav() {
+  const sidebar = document.getElementById('chapterNav');
+  const active = sidebar ? sidebar.querySelector('.nav-item.active') : null;
+  if (!sidebar || !active || window.innerWidth > 768) return;
+  const left = active.offsetLeft - (sidebar.clientWidth - active.clientWidth) / 2;
+  sidebar.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+}
+
+function chapterOrderToNumber(idx) {
+  if (idx === 0) return 0;
+  if (idx === 1) return -1;
+  return idx - 1;
+}
+
+function nextChapter(delta) {
+  let nextIdx = Math.max(0, Math.min(chapters.length - 1, cur + delta));
+  if (nextIdx === cur) return;
+  goTo(chapterOrderToNumber(nextIdx));
+}
+
+function initSwipeNav() {
+  const main = document.getElementById('mainContent');
+  if (!main) return;
+
+  let startX = 0;
+  let startY = 0;
+  let tracking = false;
+
+  main.addEventListener('touchstart', (e) => {
+    const t = e.changedTouches[0];
+    const target = e.target.closest('input, textarea, select, button, a, table');
+    if (target) {
+      tracking = false;
+      return;
+    }
+    startX = t.clientX;
+    startY = t.clientY;
+    tracking = true;
+  }, { passive: true });
+
+  main.addEventListener('touchend', (e) => {
+    if (!tracking) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - startX;
+    const dy = t.clientY - startY;
+    tracking = false;
+
+    if (Math.abs(dx) < 65 || Math.abs(dy) > 85 || Math.abs(dx) < Math.abs(dy)) return;
+
+    if (dx < 0) nextChapter(1);
+    else nextChapter(-1);
+  }, { passive: true });
+}
+
+window.addEventListener('resize', centerActiveNav);
+window.addEventListener('orientationchange', () => setTimeout(centerActiveNav, 120));
+document.addEventListener('keydown', (e) => {
+  if (window.innerWidth > 768) return;
+  if (e.key === 'ArrowLeft') nextChapter(-1);
+  if (e.key === 'ArrowRight') nextChapter(1);
+});
+
+
 // Init
 calcHeat();
 calcSleep();
+initSwipeNav();
+centerActiveNav();
 </script>
 </body>
 </html>
