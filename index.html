@@ -218,6 +218,115 @@ canvas { width: 100% !important; display: block; border-radius: 6px; }
 .sleep-era { font-size: 0.72rem; color: var(--text3); width: 50px; font-family: 'DM Mono', monospace; }
 .sleep-seg { height: 18px; border-radius: 4px; background: var(--teal); transition: width 0.5s; display: flex; align-items: center; padding-left: 6px; }
 .sleep-seg span { font-size: 0.65rem; color: rgba(255,255,255,0.8); font-family: 'DM Mono', monospace; }
+
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .layout { display: block; }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    position: sticky;
+    top: 60px;
+    z-index: 180;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 0.5rem 0.75rem;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .sidebar-label {
+    display: inline-block;
+    padding: 0.3rem 0.35rem;
+    margin-right: 0.25rem;
+    font-size: 0.58rem;
+  }
+  .nav-item {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.55rem 0.8rem;
+    margin-right: 0.35rem;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 10px;
+    background: transparent;
+    vertical-align: top;
+  }
+  .nav-item.active {
+    border-left-color: transparent;
+    border-bottom-color: var(--gold);
+  }
+  .main { overflow-y: visible; }
+  .chapter { padding: 1.25rem 1rem 2rem; max-width: 100%; }
+  .ideas,
+  .overview-grid,
+  .cards { grid-template-columns: 1fr; }
+  .fabric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ch-title { font-size: 1.65rem; }
+  .quote { padding: 0.75rem 0.9rem; }
+  .slider-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+    align-items: start;
+  }
+  .slider-row label,
+  .slider-row output {
+    min-width: 0;
+    text-align: left;
+  }
+  .bar-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+    align-items: start;
+  }
+  .bar-label,
+  .bar-val,
+  .smell-name,
+  .sleep-era {
+    width: auto;
+    min-width: 0;
+  }
+  .ch-nav {
+    gap: 0.75rem;
+    flex-direction: column;
+  }
+  .nav-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  body { font-size: 14px; }
+  .topbar {
+    padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .topbar-title { font-size: 0.96rem; }
+  .topbar-sub { font-size: 0.68rem; }
+  .progress-pill {
+    margin-left: 0;
+    order: 3;
+  }
+  .progress-bar-wrap {
+    order: 4;
+    width: 100%;
+  }
+  .viz { padding: 0.9rem; }
+  .fabric-grid { grid-template-columns: 1fr; }
+  .data-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -677,7 +786,19 @@ function goTo(n) {
   cur = idx;
   document.getElementById('prog-text').textContent = chTitles[idx] || 'Розділ ' + n;
   document.getElementById('prog-fill').style.width = (idx / (chapters.length - 1) * 100) + '%';
-  document.querySelector('.main').scrollTop = 0;
+
+  const mainEl = document.querySelector('.main');
+  if (window.innerWidth <= 900) {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (mainEl) {
+    mainEl.scrollTop = 0;
+  }
+
+  const activeNav = document.querySelectorAll('.nav-item')[idx];
+  if (activeNav) {
+    activeNav.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }
+
   if (n === 2) drawBlast();
   if (n === 3) initDB();
   if (n === 7) calcHeat();
@@ -865,6 +986,12 @@ function calcSleep() {
   else { msg = 'Катастрофічна декомпенсація. Здібності продовжують падати без стабілізації. Небезпечно поряд з реактором чи ракетами.'; color = 'var(--red)'; }
   document.getElementById('sleep-result').innerHTML = `<span style="color:${color}">${msg}</span>`;
 }
+
+
+window.addEventListener('resize', () => {
+  const activeId = chapters[cur];
+  if (activeId === 'ch-2') drawBlast();
+});
 
 // Init
 calcHeat();
