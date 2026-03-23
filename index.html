@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вояки — Мері Роуч · Атлас</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg: #0f0e0c;
+  --bg2: #181714;
+  --bg3: #222018;
+  --surface: #2a2720;
+  --border: rgba(255,220,130,0.12);
+  --border2: rgba(255,220,130,0.25);
+  --gold: #d4a84b;
+  --gold2: #f0c878;
+  --text: #e8e2d6;
+  --text2: #a09880;
+  --text3: #6a6050;
+  --red: #c44a3a;
+  --teal: #3a8a7c;
+  --blue: #3a6a9a;
+  --green: #5a8a4a;
+  --amber: #d4841a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; line-height: 1.7; }
+
+/* ─── TOP BAR ─── */
+.topbar {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 2rem;
+  display: flex; align-items: center; gap: 1.5rem;
+  position: sticky; top: 0; z-index: 200;
+}
+.topbar-title { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: var(--gold2); }
+.topbar-sub { font-size: 0.72rem; color: var(--text3); font-family: 'DM Mono', monospace; letter-spacing: 0.05em; }
+.progress-pill {
+  margin-left: auto;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 20px; padding: 4px 14px;
+  font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--text3);
+}
+.progress-bar-wrap { width: 100px; height: 4px; background: var(--surface); border-radius: 2px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.3s; }
+
+/* ─── LAYOUT ─── */
+.layout { display: flex; min-height: calc(100vh - 52px); }
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  width: 260px; flex-shrink: 0;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  position: sticky; top: 52px; height: calc(100vh - 52px);
+  padding: 1rem 0;
+}
+.sidebar-label {
+  padding: 0.75rem 1.25rem 0.3rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem; color: var(--text3);
+  letter-spacing: 0.12em; text-transform: uppercase;
+}
+.nav-item {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  padding: 0.45rem 1.25rem; cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: all 0.15s;
+  font-size: 0.8rem; color: var(--text2);
+  line-height: 1.4;
+}
+.nav-item:hover { background: var(--bg3); color: var(--text); }
+.nav-item.active { border-left-color: var(--gold); color: var(--gold2); background: rgba(212,168,75,0.07); }
+.nav-num { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text3); min-width: 20px; padding-top: 2px; }
+
+/* ─── MAIN ─── */
+.main { flex: 1; overflow-y: auto; }
+.chapter { display: none; padding: 2.5rem 3rem; max-width: 860px; }
+.chapter.active { display: block; }
+
+/* ─── CHAPTER HEADER ─── */
+.ch-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.5rem; }
+.ch-title { font-family: 'DM Serif Display', serif; font-size: 2.2rem; line-height: 1.15; color: var(--text); margin-bottom: 0.4rem; }
+.ch-title em { color: var(--gold2); font-style: italic; }
+.ch-sub { font-size: 0.85rem; color: var(--text2); font-style: italic; margin-bottom: 1.75rem; }
+.ch-divider { height: 1px; background: var(--border); margin-bottom: 2rem; }
+
+/* ─── TAGS ─── */
+.tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.tag {
+  font-family: 'DM Mono', monospace; font-size: 0.65rem;
+  padding: 0.2rem 0.65rem; border-radius: 20px;
+  border: 1px solid var(--border2); color: var(--text3);
+  letter-spacing: 0.04em;
+}
+
+/* ─── KEY IDEAS ─── */
+.ideas { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1.5rem 0; }
+.idea {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 0.9rem 1rem;
+  border-top: 2px solid var(--gold);
+}
+.idea h4 { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--gold); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.4rem; }
+.idea p { font-size: 0.82rem; color: var(--text2); line-height: 1.55; }
+
+/* ─── QUOTE ─── */
+.quote {
+  border-left: 2px solid var(--gold);
+  padding: 0.8rem 1.25rem;
+  margin: 1.5rem 0;
+  background: rgba(212,168,75,0.05);
+  border-radius: 0 6px 6px 0;
+  font-style: italic; font-family: 'DM Serif Display', serif;
+  font-size: 0.95rem; color: var(--text2); line-height: 1.6;
+}
+
+/* ─── VIZ BLOCK ─── */
+.viz { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; margin: 1.5rem 0; }
+.viz-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+
+/* ─── INTERACTIVE ─── */
+.slider-row { display: flex; align-items: center; gap: 1rem; margin: 0.75rem 0; }
+.slider-row label { font-size: 0.8rem; color: var(--text2); min-width: 180px; }
+.slider-row input[type=range] { flex: 1; accent-color: var(--gold); }
+.slider-row output { font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--gold2); min-width: 60px; text-align: right; }
+.big-num { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--gold2); margin: 0.5rem 0; }
+
+/* ─── SECTION TITLE ─── */
+.sec { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; margin: 2rem 0 0.75rem; }
+
+/* ─── TABLE ─── */
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.data-table th { padding: 0.5rem 0.75rem; text-align: left; font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text3); text-transform: uppercase; border-bottom: 1px solid var(--border); }
+.data-table td { padding: 0.45rem 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text2); }
+.data-table tr:hover td { background: var(--bg3); }
+
+/* ─── NAV BUTTONS ─── */
+.ch-nav { display: flex; justify-content: space-between; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.nav-btn {
+  background: none; border: 1px solid var(--border2);
+  border-radius: 6px; padding: 0.45rem 1rem;
+  font-size: 0.78rem; color: var(--text2); cursor: pointer;
+  transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+}
+.nav-btn:hover { border-color: var(--gold); color: var(--gold); }
+.nav-btn:disabled { opacity: 0.25; cursor: default; }
+
+/* ─── CANVAS ─── */
+canvas { width: 100% !important; display: block; border-radius: 6px; }
+
+/* ─── BARS ─── */
+.bar-row { display: flex; align-items: center; gap: 0.75rem; margin: 0.4rem 0; font-size: 0.8rem; }
+.bar-label { color: var(--text2); min-width: 160px; }
+.bar-track { flex: 1; height: 10px; background: var(--surface); border-radius: 5px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 5px; transition: width 0.5s ease; }
+.bar-val { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--text3); min-width: 50px; text-align: right; }
+
+/* ─── TIMELINE ─── */
+.timeline { position: relative; padding-left: 1.5rem; }
+.timeline::before { content:''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--border2); }
+.tl-item { position: relative; padding: 0.5rem 0 0.5rem 1.25rem; margin-bottom: 0.25rem; }
+.tl-item::before { content:''; position: absolute; left: -4px; top: 12px; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); border: 1px solid var(--bg2); }
+.tl-year { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--gold); }
+.tl-text { font-size: 0.8rem; color: var(--text2); }
+
+/* ─── CARDS ROW ─── */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.75rem; margin: 1rem 0; }
+.card { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+.card-head { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text3); text-transform: uppercase; margin-bottom: 0.4rem; }
+.card-num { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: var(--gold2); }
+.card-desc { font-size: 0.75rem; color: var(--text3); margin-top: 0.2rem; }
+
+/* ─── SMELL VIZ ─── */
+.smell-bar { display: flex; flex-direction: column; gap: 4px; margin: 0.75rem 0; }
+.smell-row { display: flex; align-items: center; gap: 0.5rem; }
+.smell-name { font-size: 0.75rem; color: var(--text2); width: 140px; }
+.smell-seg { height: 14px; border-radius: 7px; }
+
+/* ─── FABRIC GRID ─── */
+.fabric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 1rem 0; }
+.fabric-cell {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 6px; padding: 0.65rem 0.5rem; text-align: center;
+  cursor: pointer; transition: all 0.15s;
+}
+.fabric-cell:hover { border-color: var(--gold); }
+.fabric-cell.sel { border-color: var(--gold); background: rgba(212,168,75,0.1); }
+.fabric-cell .fn { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--gold); }
+.fabric-cell .fd { font-size: 0.72rem; color: var(--text2); margin-top: 0.2rem; }
+
+/* ─── DB SCALE ─── */
+.db-scale { position: relative; height: 30px; background: linear-gradient(to right, var(--teal), var(--amber), var(--red)); border-radius: 6px; margin: 1rem 0; overflow: visible; }
+.db-marker { position: absolute; top: -22px; transform: translateX(-50%); font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text3); white-space: nowrap; }
+.db-tick { position: absolute; bottom: 0; width: 1px; height: 8px; background: rgba(255,255,255,0.4); transform: translateX(-50%); }
+
+/* ─── HERO OVERVIEW ─── */
+.overview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)); gap: 0.7rem; margin: 1.5rem 0; }
+.ov-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 0.9rem 1rem; cursor: pointer;
+  transition: all 0.15s;
+}
+.ov-card:hover { border-color: var(--gold); transform: translateY(-1px); }
+.ov-num { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text3); }
+.ov-title { font-family: 'DM Serif Display', serif; font-size: 0.95rem; color: var(--text); margin: 0.2rem 0; line-height: 1.3; }
+.ov-sub { font-size: 0.72rem; color: var(--gold); }
+
+/* ─── SLEEP CHART ─── */
+.sleep-bar-wrap { margin: 0.5rem 0; }
+.sleep-bar-row { display: flex; align-items: center; gap: 0.5rem; margin: 3px 0; }
+.sleep-era { font-size: 0.72rem; color: var(--text3); width: 50px; font-family: 'DM Mono', monospace; }
+.sleep-seg { height: 18px; border-radius: 4px; background: var(--teal); transition: width 0.5s; display: flex; align-items: center; padding-left: 6px; }
+.sleep-seg span { font-size: 0.65rem; color: rgba(255,255,255,0.8); font-family: 'DM Mono', monospace; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <div class="topbar-title">Вояки · Mary Roach</div>
+    <div class="topbar-sub">Наука збереження людського життя на війні</div>
+  </div>
+  <div class="progress-pill">
+    <span id="prog-text">Вступ</span>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="prog-fill" style="width:0%"></div>
+  </div>
+</div>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-label">Огляд</div>
+  <div class="nav-item active" onclick="goTo(0)"><span class="nav-num">∞</span>Всі розділи</div>
+  <div class="sidebar-label">Вступ</div>
+  <div class="nav-item" onclick="goTo(-1)"><span class="nav-num">·</span>Як вступ</div>
+  <div class="sidebar-label">13 розділів</div>
+  <div class="nav-item" onclick="goTo(1)"><span class="nav-num">01</span>Друга шкіра</div>
+  <div class="nav-item" onclick="goTo(2)"><span class="nav-num">02</span>Бумбокс</div>
+  <div class="nav-item" onclick="goTo(3)"><span class="nav-num">03</span>Битви і вуха</div>
+  <div class="nav-item" onclick="goTo(4)"><span class="nav-num">04</span>Нижче від пояса</div>
+  <div class="nav-item" onclick="goTo(5)"><span class="nav-num">05</span>Наслідки несподівані</div>
+  <div class="nav-item" onclick="goTo(6)"><span class="nav-num">06</span>Різанина під вогнем</div>
+  <div class="nav-item" onclick="goTo(7)"><span class="nav-num">07</span>Спітнілі кулі</div>
+  <div class="nav-item" onclick="goTo(8)"><span class="nav-num">08</span>Пронос морських котиків</div>
+  <div class="nav-item" onclick="goTo(9)"><span class="nav-num">09</span>Парадокс личинок</div>
+  <div class="nav-item" onclick="goTo(10)"><span class="nav-num">10</span>Не вбиває, а смердить</div>
+  <div class="nav-item" onclick="goTo(11)"><span class="nav-num">11</span>Принади та віднади</div>
+  <div class="nav-item" onclick="goTo(12)"><span class="nav-num">12</span>Погані передчуття</div>
+  <div class="nav-item" onclick="goTo(13)"><span class="nav-num">13</span>Під водою на ногах</div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- ===== OVERVIEW ===== -->
+<div class="chapter active" id="ch-0">
+  <div class="ch-label">Огляд книги</div>
+  <h1 class="ch-title">Вояки<em>.</em></h1>
+  <p class="ch-sub">Мері Роуч · Grunt: The Curious Science of Humans at War · 2016</p>
+  <div class="ch-divider"></div>
+
+  <p style="font-size:0.88rem; color:var(--text2); margin-bottom:1.5rem">Книга про невидиму науку — не про те, як убивати, а про те, як <em>зберігати</em> людське життя. Супротивники солдата — паніка, спека, шум, мухи, нестача сну. Роуч показує науковців у їхніх незвичних лабораторіях: від стрільбища до підводного човна.</p>
+
+  <div class="quote">«Що на кожного генерала та нагородженого медаллю припадає сотня науковців, чиїх імен ви ніколи не знатимете. Саме вони і є героями цієї книги»</div>
+
+  <div class="sec">13 розділів — натисніть для переходу</div>
+  <div class="overview-grid" id="ov-grid"></div>
+
+  <div class="sec">Головні теми</div>
+  <div class="ideas">
+    <div class="idea"><h4>Матеріал</h4><p>Тканини, броня, форма: що між тілом солдата і кулею/вибухом/вогнем.</p></div>
+    <div class="idea"><h4>Тіло</h4><p>Вуха, стопи, статеві органи, шлунок, мозок — що руйнується першим і як це лагодять.</p></div>
+    <div class="idea"><h4>Середовище</h4><p>Спека, шум, вода, запах, комахи — ворог без зброї, але смертельний.</p></div>
+    <div class="idea"><h4>Психологія</h4><p>Паніка, втома, недосипання, страх акул — як наука відповідає на невидимі загрози.</p></div>
+  </div>
+</div>
+
+<!-- ===== INTRO ===== -->
+<div class="chapter" id="ch--1">
+  <div class="ch-label">Як вступ</div>
+  <h1 class="ch-title">Куряча <em>гармата</em></h1>
+  <p class="ch-sub">Про що ця книга і чому варто її читати</p>
+  <div class="ch-divider"></div>
+  <div class="tags"><span class="tag">Наука</span><span class="tag">Птахи та літаки</span><span class="tag">Нетрадиційне мислення</span></div>
+  <div class="ideas">
+    <div class="idea"><h4>Куряча гармата</h4><p>60-футова гармата стріляє курячими тушками в літаки — щоб тестувати скло кабін на зіткнення з птахами. Курка ≠ дика качка, але курку легше стандартизувати.</p></div>
+    <div class="idea"><h4>Птахи коштують $80 млн</h4><p>~3000 зіткнень птахів з літаками ВПС США на рік, від $50 до $80 млн збитків. Модель BAM (Bird Avoidance Model) допомагає уникати небезпечних зон.</p></div>
+    <div class="idea"><h4>Непомітні герої</h4><p>Ця книга — не про бої і не про зброю. Вона про людей, які досліджують, як вберегти солдата від тіла, яке не витримує, і від середовища, що вбиває.</p></div>
+    <div class="idea"><h4>Ліхтарик, не прожектор</h4><p>«Я більше схожа на людину з ліхтариком, що зазирає в закутки, шукаючи не щось конкретне, а щось цікаве»</p></div>
+  </div>
+  <div class="quote">«Відвага не завжди має зброю, прапор чи ноші. Іноді відвага — це просто готовність мислити не так, як усі навколо»</div>
+  <div class="ch-nav">
+    <button class="nav-btn" disabled>←</button>
+    <button class="nav-btn" onclick="goTo(1)">Розділ 1 →</button>
+  </div>
+</div>
+
+<!-- ===== CH 1 ===== -->
+<div class="chapter" id="ch-1">
+  <div class="ch-label">Розділ 01</div>
+  <h1 class="ch-title">Друга <em>шкіра</em></h1>
+  <p class="ch-sub">Що вдягти на війну · Натіцькі лабораторії</p>
+  <div class="ch-divider"></div>
+  <div class="tags"><span class="tag">Тканини</span><span class="tag">Вогнетривкість</span><span class="tag">Натік</span><span class="tag">Камуфляж</span><span class="tag">Кевлар</span></div>
+  <div class="ideas">
+    <div class="idea"><h4>Натіцькі лабораторії</h4><p>Центр, де тестують все, що солдат надягає, їсть, на чому спить. Від кевлара до горя-щоколаду з керосином, щоб не їли просто так.</p></div>
+    <div class="idea"><h4>Компроміс тканин</h4><p>Номекс — найогнетривкіший, але дорогий і не «дихає». Бавовна — зручна, але горить. Кожна властивість конкурує з іншою.</p></div>
+    <div class="idea"><h4>Лотос-ефект</h4><p>Супервідштовхувальне покриття (прототип — листок водяної лілії): гірчиця, кетчуп, кава — все стікає без сліду. Першочергове застосування — хімзахист.</p></div>
+    <div class="idea"><h4>Спідня білизна як зброя</h4><p>1908: армія США провела дослід з яскраво-червоною натільною білизною на Філіппінах. Результат: пітниця, висипки, гарячка, «брудно-кремовий» колір після прань.</p></div>
+  </div>
+
+  <div class="sec">Порівняння ключових тканин</div>
+  <div class="viz">
+    <div class="viz-label">Властивості військових тканин (клікніть на тканину)</div>
+    <div class="fabric-grid" id="fabric-grid"></div>
+    <div id="fabric-detail" style="margin-top:0.75rem; padding:0.75rem; background:var(--bg3); border-radius:6px; font-size:0.82rem; color:var(--text2); min-height:60px; line-height:1.5"></div>
+  </div>
+
+  <div class="sec">Хронологія червоної білизни (1897–1909)</div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">1897</div><div class="tl-text">«Ідея, що червона спідня білизна має приховану медичну користь» поширюється в медичних журналах</div></div>
+    <div class="tl-item"><div class="tl-year">1908</div><div class="tl-text">5000 яскраво-червоних кальсонів відправлено на Філіппіни для 1000 піддослідних</div></div>
+    <div class="tl-item"><div class="tl-year">1908</div><div class="tl-text">Катастрофа: 80% не підійшли за розміром, фарба линяє, пітниця, глузування товаришів</div></div>
+    <div class="tl-item"><div class="tl-year">1909</div><div class="tl-text">З 400 опитаних тільки 16 сказали щось позитивне. Кінець проекту.</div></div>
+  </div>
+
+  <div class="quote">«Армія США не терпить незрівноважених зачісок, ірокезів, дредів — і навіть борід. Провідний принцип: одноманітність. Звідси і слово — "уніформа"»</div>
+  <div class="ch-nav"><button class="nav-btn" onclick="goTo(-1)">← Вступ</button><button class="nav-btn" onclick="goTo(2)">Розділ 2 →</button></div>
+</div>
+
+<!-- ===== CH 2 ===== -->
+<div class="chapter" id="ch-2">
+  <div class="ch-label">Розділ 02</div>
+  <h1 class="ch-title">Бумбокс</h1>
+  <p class="ch-sub">Автобезпека для тих, хто їздить по бомбах</p>
+  <div class="ch-divider"></div>
+  <div class="tags"><span class="tag">ПМЗЗ/MRAP</span><span class="tag">Саморобні вибухові пристрої</span><span class="tag">Манекени ВІАМан</span><span class="tag">Стопи</span><span class="tag">Хребет</span></div>
+  <div class="ideas">
+    <div class="idea"><h4>Еволюція загрози</h4><p>Іракські бойовики: РГ → решітчаста броня → міни збоку → міни знизу. Армія відповідає: броня → MRAP → V-подібне шасі → енергопослаблювальні сидіння.</p></div>
+    <div class="idea"><h4>ВІАМан</h4><p>Манекен для оцінки бойових ушкоджень від підривів. Розроблений тому, що звичайний «Гібрид ІІІ» з автопромисловості рухається неправильно під вертикальним імпульсом вибуху.</p></div>
+    <div class="idea"><h4>П'ятка — прихована ціль</h4><p>«Палубний ляпас»: вибух знизу → п'ятка ламається → жирова подушка руйнується → 45% ампутацій. Наслідок — ходьба стає невитерпно болючою назавжди.</p></div>
+    <div class="idea"><h4>Мертві тіла рятують живих</h4><p>Донори тіл в обтислих лайкра-костюмах сидять на платформі над вибухівкою. Датчики в кістках фіксують навантаження — щоб ВІАМан міг прогнозувати травми.</p></div>
+  </div>
+
+  <div class="sec">Фізика вибуху знизу</div>
+  <div class="viz">
+    <div class="viz-label">Порівняння V-подібного та плаского шасі</div>
+    <canvas id="blastCanvas" height="180"></canvas>
+    <p style="font-size:0.75rem; color:var(--text3); margin-top:0.5rem">Стрілки показують розподіл ударної хвилі. V-подібне шасі відхиляє енергію вбік, пласке — передає вертикально крізь сидіння в хребет.</p>
+  </div>
+
+  <div class="sec">Прогресія травм від підриву (за важкістю)</div>
+  <div>
+    <div class="bar-row"><div class="bar-label">Перелом стоп / п'ятки</div><div class="bar-track"><div class="bar-fill" style="width:92%; background:var(--red)"></div></div><div class="bar-val">дуже часто</div></div>
+    <div class="bar-row"><div class="bar-label">Компресія хребта</div><div class="bar-track"><div class="bar-fill" style="width:78%; background:var(--amber)"></div></div><div class="bar-val">часто</div></div>
+    <div class="bar-row"><div class="bar-label">Травми таза</div><div class="bar-track"><div class="bar-fill" style="width:65%; background:var(--amber)"></div></div><div class="bar-val">помірно</div></div>
+    <div class="bar-row"><div class="bar-label">Черепно-мозкова травма</div><div class="bar-track"><div class="bar-fill" style="width:55%; background:var(--blue)"></div></div><div class="bar-val">помірно</div></div>
+    <div class="bar-row"><div class="bar-label">Уротравма</div><div class="bar-track"><div class="bar-fill" style="width:28%; background:var(--teal)"></div></div><div class="bar-val">рідше</div></div>
+  </div>
+  <div class="ch-nav"><button class="nav-btn" onclick="goTo(1)">← Розділ 1</button><button class="nav-btn" onclick="goTo(3)">Розділ 3 →</button></div>
+</div>
+
+<!-- ===== CH 3 ===== -->
+<div class="chapter" id="ch-3">
+  <div class="ch-label">Розділ 03</div>
+  <h1 class="ch-title">Битви <em>і вуха</em></h1>
+  <p class="ch-sub">Гуркіт на війні · ТКАПС проти затичок</p>
+  <div class="ch-divider"></div>
+  <div class="tags"><span class="tag">Слух</span><span class="tag">Децибели</span><span class="tag">ТКАПС</span><span class="tag">Затички</span><span class="tag">Кемп-Пендлтон</span></div>
+  <div class="ideas">
+    <div class="idea"><h4>Парадокс затичок</h4><p>Затички знижують шум на 30 дБ — але водночас заглушують голос командира та звук зброї ворога. Захист слуху може вбивати.</p></div>
+    <div class="idea"><h4>ТКАПС — «біонічне вухо»</h4><p>Система аналізує вхідний звук: тихі підсилює, гучні — приглушує. Дозволяє чути шепіт за 15 футів і не страждати від пострілу поруч.</p></div>
+    <div class="idea"><h4>-30 дБ = умовна непридатність</h4><p>Якщо солдат втрачає 30 дБ від хвороби — комісія вирішує, чи він придатний. Але ті самі 30 дБ ми самі даємо кожному солдату як «захист».</p></div>
+    <div class="idea"><h4>Ціна: скептицизм сержантів</h4><p>«Не треба мені цього лайна — або не працює, або сідає батарея». Технологічний прогрес в армії гальмує не бюджет, а довіра польових командирів.</p></div>
+  </div>
+
+  <div class="sec">Шумова карта поля бою (децибели)</div>
+  <div class="viz">
+    <div class="viz-label">Рівень шуму різних джерел — інтерактивно</div>
+    <div id="db-bars"></div>
+    <div style="margin-top:1rem">
+      <div class="slider-row">
+        <label>Виберіть рівень захисту (дБ):</label>
+        <input type="range" min="0" max="40" value="30" step="5" id="db-protect" oninput="updateDB()">
+        <output id="db-protect-out">−30 дБ</output>
+      </div>
+      <div id="db-result" style="margin-top:0.5rem; font-size:0.82rem; color:var(--text2)"></div>
+    </div>
+  </div>
+  <div class="ch-nav"><button class="nav-btn" onclick="goTo(2)">← Розділ 2</button><button class="nav-btn" onclick="goTo(4)">Розділ 4 →</button></div>
+</div>
+
+<!-- ===== CH 4 ===== -->
+<div class="chapter" id="ch-4">
+  <div class="ch-label">Розділ 04</div>
+  <h1 class="ch-title">Нижче <em>від пояса</em></h1>
+  <p class="ch-sub">Найжорстокіший постріл · Уротравма на війні</p>
+  <div class="ch-divider"></div>
+  <div class="tags"><span class="tag">Уротравма</span><span class="tag">Вибухи знизу</span><span class="tag">Волтер Рід</span><span class="tag">Реконструкція</span></div>
+  <div class="ideas">
+    <div class="idea"><h4>Рідкісні, але важкі</h4><p>300 генітоурологічних пацієнтів на 18 000 ампутацій. Рідко — бо такі вибухи залишають не пацієнтів, а мертвих. Більше виживших = більше потреби в реконструкції.</p></div>
+    <div class="idea"><h4>«З пуцькою все гаразд, сер»</h4><p>Капітан Вайт, без двох ніг і зі зламаним тазом, першим питає: «Кого поранило? Всі живі?» — і тільки потім — про себе. Бойове братство сильніше за біль.</p></div>
+    <div class="idea"><h4>Противибухові боксери</h4><p>Британці придумали труси з кевлару. Але кевлар не зупиняє осколки — він зупиняє бруд і пісок, що несуть бактерії та грибки у відкриту рану.</p></div>
+    <div class="idea"><h4>Прогрес виживання</h4><p>Досягнення в першій допомозі + польові шпиталі ближче до бою = більше виживших з важкими травмами. Хірурги Гопкінза вперше в США проводять трансплантацію пеніса.</p></div>
+  </div>
+  <div class="quote">«Якщо в мене більше немає члена — просто залиште мене тут. Я майже так і думав. У мене немає дітей. Повертатися я не хотів» — Капітан Вайт, після підриву</div>
+  <div class="viz">
+    <div class="viz-label">Від вибуху до відновлення: шлях пацієнта</div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-year">0 хв</div><div class="tl-text">Вибух → турнікет → заклик «Кого поранило?»</div></div>
+      <div class="tl-item"><div class="tl-year">39 хв</div><div class="tl-text">Евакуаційний гелікоптер (час у випадку Вайта)</div></div>
+      <div class="tl-item"><div class="tl-year">Дні</div><div class="tl-text">Польовий шпиталь → первинна стабілізація → повітряна евакуація</div></div>
+      <div class="tl-item"><div class="tl-year">Тижні</div><div class="tl-text">Центр Волтера Ріда: хірургія, ампутація, реконструкція уретри</div></div>
+      <div class="tl-item"><div class="tl-year">Місяці</div><div class="tl-text">Університет Гопкінза: трансплантологія, протезування, реабілітація</div></div>
+    </div>
+  </div>
+  <div class="ch-nav"><button class="nav-btn" onclick="goTo(3)">← Розділ 3</button><button class="nav-btn" onclick="goTo(5)">Розділ 5 →</button></div>
+</div>
+
+<!-- ===== CH 5 ===== -->
+<div class="chapter" id="ch-5">
+  <div class="ch-label">Розділ 05</div>
+  <h1 class="ch-title">Наслідки можуть бути <em>несподівані</em></h1>
+  <p class="ch-sub">Трансплантація геніталій · Університет Гопкінза</p>
+  <div class="ch-divider"></div>
+  <div class="tags"><span class="tag">Трансплантологія</span><span class="tag">Фалопластика</span><span class="tag">Кістковий мозок</span><span class="tag">Гопкінз</span></div>
+  <div class="ideas">
+    <div class="idea"><h4>Відчуження — головна проблема</h4><p>Шкіра — найбільш «агресивна» тканина для імунної системи. Пеніс складається з кількох типів тканин, кожна з яких може відчужуватись окремо.</p></div>
+    <div class="idea"><h4>Інфузія кісткового мозку</h4><p>Кістковий мозок донора частково «перепрограмовує» імунну систему реципієнта. Це дозволяє зменшити дози імунодепресантів і їхні побічні ефекти.</p></div>
+    <div class="idea"><h4>Перша в США трансплантація</h4><p>Операція на двох тілах-донорах у прозекторській — підготовчий етап перед першою реальною трансплантацією пеніса в Сполучених Штатах.</p></div>
+    <div class="idea"><h4>Ноги — ні, пеніс — так</h4><p>Ноги поки не є кандидатами для трансплантації — нерви занадто довго ростуть. Протезування вважається кращим. Геніталії — інша справа.</p></div>
+  </div>
+  <div class="quote">«Використання новітніх технік склонило етичний баланс у бік трансплантацій органів, що не є життєзабезпечувальними. Користь нарешті переважила недоліки»</div>
+  <div class="ch-nav"><button class="nav-btn" onclick="goTo(4)">← Розділ 4</button><button class="nav-btn" onclick="goTo(6)">Розділ 6 →</button></div>
+</div>
+
+<!-- ===== CH 6 ===== -->
+<div class="chapter" id="ch-6">
+  <div class="ch-label">Розділ 06</div>
+  <h1 class="ch-title">Різанина <em>під вогнем</em></h1>
+  <p class="ch-sub">Як медиків готують до бою · Навчання хірургів</p>
+  <div class="ch-divider"></div>
+  <div class="tags"><span class="tag">Польова медицина</span><span class="tag">Хірургія</span><span class="tag">Кров</span><span class="tag">Турнікети</span><span class="tag">Навчання</span></div>
+  <div class="ideas">
+    <div class="idea"><h4>Симуляційне навчання</h4><p>Хірурги без польового досвіду практикуються на тваринах і манекенах — щоб зберегти навичку роботи в умовах стресу, крові і хаосу.</p></div>
+    <div class="idea"><h4>Турнікет врятував тисячі</h4><p>Повернення до турнікетів (від яких відмовилися через міф про гангрену) — одне з найбільш значущих рішень. Зупинити кровотечу — першочергово.</p></div>
+    <div class="idea"><h4>«Золота година» — міф</h4><p>Насправді важливіша не «година», а «платинові 10 хвилин» першої допомоги. Кожна хвилина без зупинки кровотечі — втрата критичного об'єму крові.</p></div>
+    <div class="idea"><h4>Лікарі на передовій</h4><p>Польові шпиталі просунулись ближче до зони бойових дій — скорочення часу від пораження до операції збільшило виживаність у рази.</p></div>
+  </div>
+  <div class="viz">
+    <div class="viz-label">Виживаність поранених: динаміка по конфліктах</div>
+    <div>
+      <div class="bar-row"><div class="bar-label">Громадянська війна США</div><div class="bar-track"><div class="bar-fill" style="width:27%; background:var(--red)"></div></div><div class="bar-val">~27%</div></div>
+      <div class="bar-row"><div class="bar-label">Перша світова війна</div><div class="bar-track"><div class="bar-fill" style="width:35%; background:var(--amber)"></div></div><div class="bar-val">~35%</div></div>
+      <div class="bar-row"><div class="bar-label">Друга світова війна</div><div class="bar-track"><div class="bar-fill" style="width:53%; background:var(--amber)"></div></div><div class="bar-val">~53%</div></div>
+      <div class="bar-row"><div class="bar-label">В'єтнам</div><div class="bar-track"><div class="bar-fill" style="width:76%; background:var(--teal)"></div></div><div class="bar-val">~76%</div></div>
+      <div class="bar-row"><div class="bar-label">Ірак / Афганістан</div><div class="bar-track"><div class="bar-fill" style="width:90%; background:var(--green)"></div></div><div class="bar-val">>90%</div></div>
+    </div>
+    <p style="font-size:0.72rem; color:var(--text3); margin-top:0.5rem">Виживаність поранених, що досягли медичної допомоги. Прогрес зумовлений: турнікетами, польовими шпиталями, вертольотами, кров'ю на місці.</p>
+  </div>
+  <div class="ch-nav"><button class="nav-btn" onclick="goTo(5)">← Розділ 5</button><button class="nav-btn" onclick="goTo(7)">Розділ 7 →</button></div>
+</div>
+
+<!-- ===== CH 7 ===== -->
+<div class="chapter" id="ch-7">
+  <div class="ch-label">Розділ 07</div>
+  <h1 class="ch-title">Спітнілі <em>кулі</em></h1>
+  <p class="ch-sub">Як воювати зі спекою · Терморегуляція і рейнджери</p>
+  <div class="ch-divider"></div>
+  <div class="tags"><span class="tag">Спека</span><span class="tag">Терморегуляція</span><span class="tag">Піт</span><span class="tag">Тепловий удар</span><span class="tag">Рейнджери</span></div>
+  <div class="ideas">
+    <div class="idea"><h4>2,4 млн потових залоз</h4><p>Піт — не «охолоджуюча рідина», а гаряча кров (плазма). Охолодження йде через випаровування. В екстремумі — 2 кг поту на годину.</p></div>
+    <div class="idea"><h4>Конкуренція за кров</h4><p>Спека + фізична робота: кров потрібна і для поту (охолодження), і для м'язів (робота). Не вистачає — людина непритомніє. Тепловий удар = системний збій.</p></div>
+    <div class="idea"><h4>14 577 випадків (2007–2011)</h4><p>Зафіксовані випадки теплової немочі серед активного особового складу США. Школа рейнджерів у Форт-Бенінгу — 100°F, вологість, 60-фунтові наплічники.</p></div>
+    <div class="idea"><h4>Генетичні маркери схильності</h4><p>Армія шукає аналіз крові, який виявив би тих, хто схильний до теплового удару — щоб командири знали, за ким пильніше стежити в спеку.</p></div>
+  </div>
+
+  <div class="sec">Симулятор теплового навантаження</div>
+  <div class="viz">
+    <div class="viz-label">Розрахунок ризику теплового удару</div>
+    <div class="slider-row"><label>Температура повітря (°F):</label><input type="range" min="70" max="120" value="95" id="temp-sl" oninput="calcHeat()"><output id="temp-out">95°F</output></div>
+    <div class="slider-row"><label>Вологість (%):</label><input type="range" min="10" max="100" value="60" id="hum-sl" oninput="calcHeat()"><output id="hum-out">60%</output></div>
+    <div class="slider-row"><label>Навантаження (наплічник, фунти):</label><input type="range" min="0" max="80" value="40" id="load-sl" oninput="calcHeat()"><output id="load-out">40 lbs</output></div>
+    <div style="margin-top:0.75rem; padding:0.75rem; background:var(--bg3); border-radius:6px; font-size:0.88rem" id="heat-result"></div>
+  </div>
+  <div class="ch-nav"><button class="nav-btn" onclick="goTo(6)">← Розділ 6</button><button class="nav-btn" onclick="goTo(8)">Розділ 8 →</button></div>
+</div>
+
+<!-- ===== CH 8 ===== -->
+<div class="chapter" id="ch-8">
+  <div class="ch-label">Розділ 08</div>
+  <h1 class="ch-title">Якщо в «морських котиків» <em>пронос</em></h1>
+  <p class="ch-sub">Діарея як загроза національній безпеці</p>
+  <div class="ch-divider"></div>
+  <div class="tags"><span class="tag">Діарея</span><span class="tag">Польова гігієна</span><span class="tag">Боєздатність</span><span class="tag">Пробіотики</span></div>
+  <div class="ideas">
+    <div class="idea"><h4>Діарея вбиває місії</h4><p>Під час Першої Перської затоки ~60% морпіхів захворіли через антисанітарію. 10 тисяч людей — два туалети. Хвора людина не боєздатна.</p></div>
+    <div class="idea"><h4>Дослідження «Операція Діарея»</h4><p>DARPA і армія вкладають гроші в дослідження шлунково-кишкових розладів у бойовій обстановці. Результат: нові польові заходи гігієни і пробіотики.</p></div>
+    <div class="idea"><h4>Пріоритети поставок</h4><p>В перші дні операції: спочатку зброя і набої, потім — туалети і холодильники. Але без санітарії армія програє швидко не ворогу, а бактеріям.</p></div>
+    <div class="idea"><h4>Громадянська війна: «літня діарея»</h4><p>У XIX ст. від хвороб гинуло більше солдатів, ніж від куль. Діарея — один з головних вбивць армій в усіх конфліктах до XX ст.</p></div>
+  </div>
+  <div class="viz">
+    <div class="viz-label">Смертність: бойові рани vs хвороби (США)</div>
+    <div>
+      <div class="bar-row"><div class="bar-label">Громадянська війна (1861–65)</div><div class="bar-track"><div class="bar-fill" style="width:67%; background:var(--amber)"></div></div><div class="bar-val">67% хвороби</div></div>
+      <div class="bar-row"><div class="bar-label">Іспано-американська (1898)</div><div class="bar-track"><div class="bar-fill" style="width:80%; background:var(--red)"></div></div><div class="bar-val">80% хвороби</div></div>
+      <div class="bar-row"><div class="bar-label">Перша світова</div><div class="bar-track"><div class="bar-fill" style="width:46%; background:var(--amber)"></div></div><div class="bar-val">46% хвороби</div></div>
+      <div class="bar-row"><div class="bar-label">Друга світова</div><div class="bar-track"><div class="bar-fill" style="width:27%; background:var(--teal)"></div></div><div class="bar-val">27% хвороби</div></div>
+      <div class="bar-row"><div class="bar-label">Ірак / Афганістан</div><div class="bar-track"><div class="bar-fill" style="width:12%; background:var(--green)"></div></div><div class="bar-val">~12% хвороби</div></div>
+    </div>
+  </div>
+  <div class="ch-nav"><button class="nav-btn" onclick="goTo(7)">← Розділ 7</button><button class="nav-btn" onclick="goTo(9)">Розділ 9 →</button></div>
+</div>
+
+<!-- ===== CH 9 ===== -->
+<div class="chapter" id="ch-9">
+  <div class="ch-label">Розділ 09</div>
+  <h1 class="ch-title">Парадокс <em>личинок</em></h1>
+  <p class="ch-sub">Мухи на полі бою — користь і шкода</p>
+  <div class="ch-divider"></div>
+  <div class="tags"><span class="tag">Мухи</span><span class="tag">Личинки</span><span class="tag">Інфекція</span><span class="tag">Ентомологія</span><span class="tag">Поле бою</span></div>
+  <div class="ideas">
+    <div class="idea"><h4>Муха — машина зараження</h4><p>16–31 відригувань і випорожнень за добу. E.coli, черевний тиф, холера, дизентерія. Одна муха може передати десятки патогенів на їжу солдата.</p></div>
+    <div class="idea"><h4>Квота на вбивство мух</h4><p>Єгипет, Ель-Аламейн, WWII: британські офіцери зобов'язали кожного солдата вбивати не менше 50 мух на день — іншого виходу не було.</p></div>
+    <div class="idea"><h4>Личинки — рятівники ран</h4><p>Перша світова: лікар Вільям Баер запускав личинок у рани, щоб очищали їх від мертвих тканин. Вони їдять тільки некроз, не чіпаючи живу плоть. Парадокс: муха шкодить і рятує.</p></div>
+    <div class="idea"><h4>85% менше отруєнь</h4><p>Дослідження ізраїльської армії 1991 р.: підрозділ з інтенсивною боротьбою з мухами — на 85% менше харчових отруєнь, ніж у контрольному підрозділі.</p></div>
+  </div>
+  <div class="quote">«Поле бою для мух — це рай: велика кількість органіки, яка гниє, яку можна їсти, у яку можна відкладати яйця»</div>
+  <div class="viz">
+    <div class="viz-label">Стратегії боротьби з мухами (ефективність)</div>
+    <div>
+      <div class="bar-row"><div class="bar-label">Польова санітарія / туалети</div><div class="bar-track"><div class="bar-fill" style="width:88%; background:var(--green)"></div></div><div class="bar-val">дуже висока</div></div>
+      <div class="bar-row"><div class="bar-label">Холодне зберігання їжі</div><div class="bar-track"><div class="bar-fill" style="width:82%; background:var(--teal)"></div></div><div class="bar-val">висока</div></div>
+      <div class="bar-row"><div class="bar-label">Інсектициди</div><div class="bar-track"><div class="bar-fill" style="width:70%; background:var(--teal)"></div></div><div class="bar-val">помірна</div></div>
+      <div class="bar-row"><div class="bar-label">Сітки та екрани</div><div class="bar-track"><div class="bar-fill" style="width:60%; background:var(--blue)"></div></div><div class="bar-val">помірна</div></div>
+      <div class="bar-row"><div class="bar-label">Квота вбивства мух</div><div class="bar-track"><div class="bar-fill" style="width:30%; background:var(--amber)"></div></div><div class="bar-val">низька</div></div>
+    </div>
+  </div>
+  <div class="ch-nav"><button class="nav-btn" onclick="goTo(8)">← Розділ 8</button><button class="nav-btn" onclick="goTo(10)">Розділ 10 →</button></div>
+</div>
+
+<!-- ===== CH 10 ===== -->
+<div class="chapter" id="ch-10">
+  <div class="ch-label">Розділ 10</div>
+  <h1 class="ch-title">Не вбиває, <em>а смердить</em></h1>
+  <p class="ch-sub">Смердючі бомби · Деморалізація через запах</p>
+  <div class="ch-divider"></div>
+  <div class="tags"><span class="tag">Хімія запаху</span><span class="tag">УСС / ОСС</span><span class="tag">Деморалізація</span><span class="tag">Друга світова</span><span class="tag">SAC-23</span></div>
+  <div class="ideas">
+    <div class="idea"><h4>SAC-23 — «секретна зброя»</h4><p>1943–1945: УСС і британське УСО 2 роки та 7 старших офіцерів розробляли речовину з «надзвичайно тривким запахом, що наводить на думку про особисту неохайність».</p></div>
+    <div class="idea"><h4>Ернест Крокер — «ніс на мільйон»</h4><p>Хімік «Артур Д. Літтл» з Кембриджа. Завдання: відтворити запах рідкого проносу для розбризкування на японських офіцерів в окупованих країнах.</p></div>
+    <div class="idea"><h4>Фекалії — складна хімія</h4><p>Скатол, сульфід водню, кислоти — десятки сполук у «природному» запасі. Точне відтворення неможливе і дуже дороге. Ось чому «пердіжні спреї» «не справжні».</p></div>
+    <div class="idea"><h4>Сучасні «непримусові» зброї</h4><p>Сьогодні US Army дослідила «Запах американця» та «Запах індієць» як потенційні тактичні засоби. Деморалізація через культурні тригери — дослідження продовжується.</p></div>
+  </div>
+
+  <div class="sec">Хімія неприємного запаху</div>
+  <div class="viz">
+    <div class="viz-label">Ключові компоненти «відразливих» запахів</div>
+    <div class="smell-bar">
+      <div class="smell-row"><div class="smell-name">Скатол (фекалії)</div><div class="smell-seg" style="width:85%; background:var(--red); height:14px; border-radius:7px"></div></div>
+      <div class="smell-row"><div class="smell-name">Сульфід водню (яйця)</div><div class="smell-seg" style="width:70%; background:var(--amber); height:14px; border-radius:7px"></div></div>
+      <div class="smell-row"><div class="smell-name">Масляна кислота (блювота/сир)</div><div class="smell-seg" style="width:60%; background:var(--amber); height:14px; border-radius:7px"></div></div>
+      <div class="smell-row"><div class="smell-name">Кадаверин (труп)</div><div class="smell-seg" style="width:78%; background:var(--red); height:14px; border-radius:7px"></div></div>
+      <div class="smell-row"><div class="smell-name">Триметиламін (риба/вагіна)</div><div class="smell-seg" style="width:50%; background:var(--blue); height:14px; border-radius:7px"></div></div>
+    </div>
+    <p style="font-size:0.72rem; color:var(--text3); margin-top:0.5rem">Ширина смуги — відносна інтенсивність «відразливості» залежно від концентрації. Контекст змінює сприйняття: масляна кислота в парфумерії — «землистий» тон, будь-де ще — відраза.</p>
+  </div>
+  <div class="ch-nav"><button class="nav-btn" onclick="goTo(9)">← Розділ 9</button><button class="nav-btn" onclick="goTo(11)">Розділ 11 →</button></div>
+</div>
+
+<!-- ===== CH 11 ===== -->
+<div class="chapter" id="ch-11">
+  <div class="ch-label">Розділ 11</div>
+  <h1 class="ch-title">Принади та <em>віднади</em></h1>
+  <p class="ch-sub">Як зробити та випробувати репелент від акул</p>
+  <div class="ch-divider"></div>
+  <div class="tags"><span class="tag">Акули</span><span class="tag">Репелент</span><span class="tag">УСС</span><span class="tag">WWII</span><span class="tag">Бойовий дух</span></div>
+  <div class="ideas">
+    <div class="idea"><h4>Страх акул = загроза вербуванню</h4><p>Флот фінансував проект не через реальні втрати (жодного офіційного нападу на присяжного моряка), а тому що страх зменшував кількість добровольців-авіаторів.</p></div>
+    <div class="idea"><h4>79 речовин — всі провалились</h4><p>Ротенон, гвоздична олія, ванілін, нікотин, нафталін, кінська сеча, спаржа... Акули їли попри все. Що не вбивало — не лякало.</p></div>
+    <div class="idea"><h4>Підказка від рибалок</h4><p>Стюарт Спрінгер помітив: якщо на гачку є залишки акулячого м'яса — інші акули не клюють. Мертві акули відлякують живих. Так знайшли активний компонент.</p></div>
+    <div class="idea"><h4>«Рожева пігулка»</h4><p>Репелент розроблявся насамперед як психологічний захист. Навіть плацебо, у яке вірить пілот, збільшує кількість добровольців — і це цінно саме по собі.</p></div>
+  </div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">1941</div><div class="tl-text">Антрополог Генрі Філд читає рапорт про пілота Еквадору серед акул в Тихому океані і пише президенту Рузвельту</div></div>
+    <div class="tl-item"><div class="tl-year">1942</div><div class="tl-text">Флот США фінансує Проект 374. Контракт OEMcmr-184: три місяці на захист від акул, баракуд і медуз</div></div>
+    <div class="tl-item"><div class="tl-year">1942–44</div><div class="tl-text">79 речовин протестовано у Вулдзголі на морських собаках. Всі провалились.</div></div>
+    <div class="tl-item"><div class="tl-year">1944</div><div class="tl-text">Відкриття: мертва акула відлякує живих. Знайдено активний компонент «Shark Chaser»</div></div>
+  </div>
+  <div class="ch-nav"><button class="nav-btn" onclick="goTo(10)">← Розділ 10</button><button class="nav-btn" onclick="goTo(12)">Розділ 12 →</button></div>
+</div>
+
+<!-- ===== CH 12 ===== -->
+<div class="chapter" id="ch-12">
+  <div class="ch-label">Розділ 12</div>
+  <h1 class="ch-title">Про погані передчуття <em>підводників</em></h1>
+  <p class="ch-sub">Коли під водою щось іде не так · «Мокрий тренер»</p>
+  <div class="ch-divider"></div>
+  <div class="tags"><span class="tag">Підводний човен</span><span class="tag">Протікання</span><span class="tag">Тиск</span><span class="tag">Аварійний ремонт</span><span class="tag">Гротон</span></div>
+  <div class="ideas">
+    <div class="idea"><h4>Фізика катастрофи</h4><p>На 1000 футах глибини 8-дюймова дірка кожні 3 хвилини пропускає олімпійський басейн воду. Промінь тиску 90 фкд може зламати руку або вибити інструмент.</p></div>
+    <div class="idea"><h4>«Мокрий тренер» — Гротон</h4><p>Тренувальний комплекс з контролю пошкоджень: 11 матросів ліквідують симульовані протікання різних типів під керівництвом інструктора з табличками через скло.</p></div>
+    <div class="idea"><h4>Сосновий чіп і марлін</h4><p>Сосновий дерев'яний конус + щільна мотузка — засоби з доби вітрильників, що досі ефективно зупиняють протікання на ядерних субмаринах.</p></div>
+    <div class="idea"><h4>«Коул» і матраци</h4><p>Після вибуху аль-Каїди пробоїна 40×60 футів закрита матрацами, шматками дерева, причальними канатами і кросівками. Три дні — але не потонули.</div></div>
+  </div>
+  <div class="viz">
+    <div class="viz-label">Тиск води на різних глибинах (фунтів на кв. дюйм)</div>
+    <div id="depth-bars"></div>
+    <p style="font-size:0.72rem; color:var(--text3); margin-top:0.5rem">Кожні 33 фути глибини додають ~14.7 фкд (1 атмосфера). На 300 футах тиск ~135 фкд — достатньо, щоб вигнути коліно назад.</p>
+  </div>
+  <div class="ch-nav"><button class="nav-btn" onclick="goTo(11)">← Розділ 11</button><button class="nav-btn" onclick="goTo(13)">Розділ 13 →</button></div>
+</div>
+
+<!-- ===== CH 13 ===== -->
+<div class="chapter" id="ch-13">
+  <div class="ch-label">Розділ 13</div>
+  <h1 class="ch-title">Під водою <em>на ногах</em></h1>
+  <p class="ch-sub">Субмарина намагається виспатись · «Теннессі»</p>
+  <div class="ch-divider"></div>
+  <div class="tags"><span class="tag">Сон</span><span class="tag">Підводники</span><span class="tag">Когнітивні порушення</span><span class="tag">Ядерні ракети</span><span class="tag">Тріада</span></div>
+  <div class="ideas">
+    <div class="idea"><h4>4 години сну на добу</h4><p>Середній сон на «Теннессі» — 4 год. У 1949 р. — 10 год. Ядерні реактори збільшили складність систем і кількість вахт, зменшивши можливості для відпочинку.</p></div>
+    <div class="idea"><h4>Катастрофічна декомпенсація</h4><p>Менше 4 годин — стабілізація не настає, здібності деградують. 2 тижні по 6 годин = ті самі порушення, що й 48 годин без сну. І людина цього не відчуває.</p></div>
+    <div class="idea"><h4>Ядерна тріада</h4><p>14 субмарин-ракетоносців США — невидимий елемент «тріади стримування». 24 ракети «Трайдент ІІ» на борту кожної. Стратегія: ви не знайдете їх усіх.</p></div>
+    <div class="idea"><h4>Сон і ухвалення рішень</h4><p>Недосип руйнує: пам'ять, увагу, інтеграцію емоцій і здорового глузду. Хронічно недоспані люди наглядають за ядерними реакторами і ракетами.</p></div>
+  </div>
+
+  <div class="sec">Еволюція сну на субмаринах (інтерактивно)</div>
+  <div class="viz">
+    <div class="viz-label">Середній сон підводника (годин на добу)</div>
+    <div class="sleep-bar-wrap">
+      <div class="sleep-bar-row"><div class="sleep-era">1949</div><div class="sleep-seg" style="width:83%"><span>10 год</span></div></div>
+      <div class="sleep-bar-row"><div class="sleep-era">1954+</div><div class="sleep-seg" style="width:66%"><span>8 год</span></div></div>
+      <div class="sleep-bar-row"><div class="sleep-era">1970s</div><div class="sleep-seg" style="width:50%"><span>6 год</span></div></div>
+      <div class="sleep-bar-row"><div class="sleep-era">Зараз</div><div class="sleep-seg" style="width:33%; background:var(--red)"><span>4 год</span></div></div>
+    </div>
+    <p style="font-size:0.72rem; color:var(--text3); margin-top:0.5rem">Ядерні реактори потребують більшого екіпажу і більше навчань. Кожне нове покоління субмарин = менше сну.</p>
+
+    <div style="margin-top:1rem">
+      <div class="slider-row">
+        <label>Годин сну на добу:</label>
+        <input type="range" min="2" max="10" value="4" step="0.5" id="sleep-sl" oninput="calcSleep()">
+        <output id="sleep-out">4 год</output>
+      </div>
+      <div id="sleep-result" style="margin-top:0.5rem; padding:0.75rem; background:var(--bg3); border-radius:6px; font-size:0.82rem; color:var(--text2)"></div>
+    </div>
+  </div>
+
+  <div class="quote">«Щоденна неможливість мати адекватно тривалий сон призводить до того, що особовий склад виконує свої обов'язки, ніби в стані алкогольного отруєння» — Бюлетень підводного флоту</div>
+  <div class="ch-nav"><button class="nav-btn" onclick="goTo(12)">← Розділ 12</button><button class="nav-btn" onclick="goTo(0)">↑ Огляд</button></div>
+</div>
+
+</main>
+</div>
+
+<script>
+// ─── Navigation ───
+const chapters = ['ch-0','ch--1','ch-1','ch-2','ch-3','ch-4','ch-5','ch-6','ch-7','ch-8','ch-9','ch-10','ch-11','ch-12','ch-13'];
+const chTitles = ['Огляд','Вступ','Друга шкіра','Бумбокс','Битви і вуха','Нижче від пояса','Наслідки несподівані','Різанина','Спітнілі кулі','Пронос морських котиків','Парадокс личинок','Не вбиває, а смердить','Принади та віднади','Погані передчуття','Під водою на ногах'];
+let cur = 0;
+
+function goTo(n) {
+  const idx = n === 0 ? 0 : n === -1 ? 1 : n + 1;
+  document.querySelectorAll('.chapter').forEach(c => c.classList.remove('active'));
+  document.getElementById('ch-' + n).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach((el, i) => el.classList.toggle('active', i === idx));
+  cur = idx;
+  document.getElementById('prog-text').textContent = chTitles[idx] || 'Розділ ' + n;
+  document.getElementById('prog-fill').style.width = (idx / (chapters.length - 1) * 100) + '%';
+  document.querySelector('.main').scrollTop = 0;
+  if (n === 2) drawBlast();
+  if (n === 3) initDB();
+  if (n === 7) calcHeat();
+  if (n === 12) initDepth();
+  if (n === 13) calcSleep();
+}
+
+// ─── Overview grid ───
+const ovData = [
+  {n:'01',t:'Друга шкіра',s:'Тканини і вогонь'},
+  {n:'02',t:'Бумбокс',s:'Броня і вибухи знизу'},
+  {n:'03',t:'Битви і вуха',s:'Шум і слух'},
+  {n:'04',t:'Нижче від пояса',s:'Уротравма'},
+  {n:'05',t:'Наслідки несподівані',s:'Трансплантологія'},
+  {n:'06',t:'Різанина під вогнем',s:'Польова медицина'},
+  {n:'07',t:'Спітнілі кулі',s:'Спека і терморегуляція'},
+  {n:'08',t:'Пронос морських котиків',s:'Діарея і санітарія'},
+  {n:'09',t:'Парадокс личинок',s:'Мухи: шкода і користь'},
+  {n:'10',t:'Не вбиває, а смердить',s:'Смердючі бомби'},
+  {n:'11',t:'Принади та віднади',s:'Репелент від акул'},
+  {n:'12',t:'Погані передчуття',s:'Протікання субмарин'},
+  {n:'13',t:'Під водою на ногах',s:'Сон підводників'}
+];
+const grid = document.getElementById('ov-grid');
+ovData.forEach((d, i) => {
+  const el = document.createElement('div');
+  el.className = 'ov-card';
+  el.innerHTML = `<div class="ov-num">Розділ ${d.n}</div><div class="ov-title">${d.t}</div><div class="ov-sub">${d.s}</div>`;
+  el.onclick = () => goTo(i + 1);
+  grid.appendChild(el);
+});
+
+// ─── Fabrics ───
+const fabrics = [
+  {n:'Номекс',props:['Вогнетривкість: ★★★★★','Вологовідвід: ★★☆','Ціна: дуже висока','Плавиться: ні'],desc:'Ідеальний для танкістів та авіаторів. Мінімум 5 секунд до займання. Але дорогий і не «дихає» — в спеку некомфортний.'},
+  {n:'Defender M',props:['Вогнетривкість: ★★★★☆','Вологовідвід: ★★★★☆','Ціна: помірна','Міцність: ★★★☆☆'],desc:'Стандартна польова уніформа US Army (FR ACU). Рветься від вибухів, але відбульки від тіла знижуючи опіки. Солдати жартують: "frack you".'},
+  {n:'Бавовна',props:['Вогнетривкість: ★★☆','Вологовідвід: ★★★★★','Ціна: низька','Самозаймання: ~700°F'],desc:'Зручна, але горить. Не плавиться і не прилипає до шкіри — перевага над поліестером. Зараз досліджують вогнетривку обробку.'},
+  {n:'Поліестер',props:['Вогнетривкість: ★★★☆','Вологовідвід: ★★☆','Ціна: низька','Небезпека: плавиться!'],desc:'НЕ рекомендований у бойових умовах — плавиться і прилипає до шкіри, подовжуючи контакт. Колготки з поліестеру в палаючому танку — найгірший сценарій.'},
+  {n:'Кевлар',props:['Вогнетривкість: ★★★★☆','Міцність: ★★★★★','Ціна: висока','Застосування: броня'],desc:'Основа бронежилетів. 15–40 шарів зупиняють осколки. Але НЕ захищає від бруду/бактерій у рані. Противибухові боксери з кевлару — реальна річ.'},
+  {n:'Вовна',props:['Вогнетривкість: ★★★★☆','Вологовідвід: ★★★★★','Ціна: висока','Природна: так'],desc:'Повертається у фокус. Вогнетривка, абсорбує вологу, не плавиться. Проблема: нестача овець в США відповідно до поправки Беррі. Кожухи 1850-х врятували від ядерних вибухів у 1950-х.'},
+  {n:'Шовк',props:['Міцність: ★★★★★','Вогнетривкість: ★★☆','Ціна: висока','Розривається: чисто'],desc:'Таємна зброя: не залишає дрібних фрагментів у рані при розриві (бавовна — залишає). Особливо павучий шовк — краще за сталь у розрахунку міцність/вага. Натік мав «павучу кімнату».'},
+  {n:'Супервідштов.',props:['Хімзахист: ★★★★★','Вологовідвід: ★★★★★','Ціна: висока','Прототип: лілея'],desc:'Покриття на основі наноструктур листка водяної лілії. Гірчиця, олія, кетчуп стікають без сліду. Першочергове використання: хімічний і біологічний захист, не самоочищення.'}
+];
+const fg = document.getElementById('fabric-grid');
+fabrics.forEach((f, i) => {
+  const el = document.createElement('div');
+  el.className = 'fabric-cell';
+  el.innerHTML = `<div class="fn">${f.n}</div><div class="fd">${f.props[0].split(':')[0]}</div>`;
+  el.onclick = () => {
+    document.querySelectorAll('.fabric-cell').forEach(c => c.classList.remove('sel'));
+    el.classList.add('sel');
+    document.getElementById('fabric-detail').innerHTML = `<strong style="color:var(--gold)">${f.n}</strong><br>${f.props.join(' · ')}<br><br>${f.desc}`;
+  };
+  fg.appendChild(el);
+});
+
+// ─── Blast canvas ───
+function drawBlast() {
+  const c = document.getElementById('blastCanvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  c.width = c.offsetWidth * window.devicePixelRatio || 600;
+  c.height = 180 * window.devicePixelRatio;
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  const W = c.offsetWidth || 600, H = 180;
+  ctx.clearRect(0, 0, W, H);
+
+  // Left: flat chassis
+  ctx.fillStyle = '#2a2720';
+  ctx.fillRect(20, 60, 200, 40);
+  ctx.strokeStyle = '#d4a84b';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(20, 60, 200, 40);
+  ctx.fillStyle = '#a09880';
+  ctx.font = '11px DM Mono, monospace';
+  ctx.fillText('Пласке шасі', 70, 55);
+
+  // Arrows up (bad)
+  for (let x = 40; x <= 200; x += 30) {
+    ctx.beginPath(); ctx.strokeStyle = '#c44a3a'; ctx.lineWidth = 2;
+    ctx.moveTo(x, 140); ctx.lineTo(x, 105);
+    ctx.stroke();
+    ctx.beginPath(); ctx.fillStyle = '#c44a3a';
+    ctx.moveTo(x, 100); ctx.lineTo(x-5, 110); ctx.lineTo(x+5, 110); ctx.closePath(); ctx.fill();
+  }
+  ctx.fillStyle = '#c44a3a'; ctx.font = '10px DM Mono, monospace';
+  ctx.fillText('Вертикальний удар → хребет', 18, 158);
+
+  // Right: V-shape
+  const rx = 280;
+  ctx.beginPath(); ctx.strokeStyle = '#3a8a7c'; ctx.lineWidth = 2;
+  ctx.moveTo(rx, 100); ctx.lineTo(rx + 50, 60); ctx.lineTo(rx + 150, 60); ctx.lineTo(rx + 200, 100); ctx.stroke();
+  ctx.fillStyle = '#a09880'; ctx.font = '11px DM Mono, monospace';
+  ctx.fillText('V-подібне шасі', rx + 50, 55);
+
+  // Arrows diagonal (good)
+  const midX = rx + 100;
+  ctx.beginPath(); ctx.strokeStyle = '#3a8a7c'; ctx.lineWidth = 2;
+  ctx.moveTo(midX, 140); ctx.lineTo(midX - 40, 105); ctx.stroke();
+  ctx.beginPath(); ctx.strokeStyle = '#3a8a7c'; ctx.lineWidth = 2;
+  ctx.moveTo(midX, 140); ctx.lineTo(midX + 40, 105); ctx.stroke();
+  ctx.fillStyle = '#3a8a7c'; ctx.font = '10px DM Mono, monospace';
+  ctx.fillText('Енергія відхиляється вбік', rx + 10, 158);
+}
+
+// ─── DB bars ───
+const dbData = [
+  {name:'Звичайна мова', db:60},
+  {name:'Заповнений ресторан', db:75},
+  {name:'Стандарт безпечного шуму', db:85},
+  {name:'Автотраса', db:90},
+  {name:'БМП «Бредлі» (гусениці)', db:130},
+  {name:'Гелікоптер «Блек Гоук»', db:106},
+  {name:'Бензопила', db:115},
+  {name:'Реактивний двигун (поруч)', db:140},
+  {name:'АТ-4 (протитанковий РГ)', db:187}
+];
+
+function initDB() {
+  const el = document.getElementById('db-bars');
+  if (!el || el._done) return;
+  el._done = true;
+  el.innerHTML = dbData.map(d => `
+    <div class="bar-row">
+      <div class="bar-label" style="font-size:0.78rem">${d.name}</div>
+      <div class="bar-track">
+        <div class="bar-fill" id="dbf-${d.db}" style="width:${Math.min(100, d.db / 2)}%; background:${d.db > 130 ? 'var(--red)' : d.db > 100 ? 'var(--amber)' : 'var(--teal)'}"></div>
+      </div>
+      <div class="bar-val">${d.db} дБ</div>
+    </div>`).join('');
+  updateDB();
+}
+
+function updateDB() {
+  const prot = parseInt(document.getElementById('db-protect').value);
+  document.getElementById('db-protect-out').textContent = '−' + prot + ' дБ';
+  const safeMax = 85 + prot;
+  const dangerous = dbData.filter(d => d.db - prot > 85).map(d => `${d.name} (${d.db - prot} дБ після захисту)`);
+  document.getElementById('db-result').innerHTML = dangerous.length
+    ? `<span style="color:var(--red)">Все ще небезпечно:</span> ${dangerous.slice(0,3).join('; ')}`
+    : `<span style="color:var(--green)">Захист ${prot} дБ достатній для цих джерел</span>`;
+}
+
+// ─── Heat calc ───
+function calcHeat() {
+  const t = parseInt(document.getElementById('temp-sl').value);
+  const h = parseInt(document.getElementById('hum-sl').value);
+  const l = parseInt(document.getElementById('load-sl').value);
+  document.getElementById('temp-out').textContent = t + '°F';
+  document.getElementById('hum-out').textContent = h + '%';
+  document.getElementById('load-out').textContent = l + ' lbs';
+  const hi = t + 0.33 * (h - 40);
+  const risk = hi + l * 0.3;
+  let level, color, advice;
+  if (risk > 180) { level = 'Критичний: тепловий удар вірогідний'; color = 'var(--red)'; advice = 'Зупинити навчання. Охолодження водою та льодом.'; }
+  else if (risk > 140) { level = 'Небезпечний: теплова немоч'; color = 'var(--amber)'; advice = 'Зменшити темп. Моніторинг ректальної температури.'; }
+  else if (risk > 110) { level = 'Попередження: слідкуйте за симптомами'; color = 'var(--amber)'; advice = 'Збільшити перерви, рясне пиття.'; }
+  else { level = 'Помірний ризик'; color = 'var(--teal)'; advice = 'Стандартні протоколи гідратації.'; }
+  document.getElementById('heat-result').innerHTML = `<span style="color:${color}; font-weight:500">${level}</span><br><span style="color:var(--text3); font-size:0.78rem">${advice} (Індекс спеки: ${Math.round(hi)}°F + навантаження)</span>`;
+}
+
+// ─── Depth bars ───
+function initDepth() {
+  const el = document.getElementById('depth-bars');
+  if (!el || el._done) return;
+  el._done = true;
+  const depths = [{d:33,p:15},{d:100,p:45},{d:300,p:135},{d:600,p:270},{d:1000,p:450}];
+  el.innerHTML = depths.map(d => `
+    <div class="bar-row">
+      <div class="bar-label">${d.d} футів</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.min(100, d.p/4.5)}%; background:${d.p > 270 ? 'var(--red)' : d.p > 135 ? 'var(--amber)' : 'var(--teal)'}"></div></div>
+      <div class="bar-val">${d.p} фкд</div>
+    </div>`).join('');
+}
+
+// ─── Sleep calc ───
+function calcSleep() {
+  const s = parseFloat(document.getElementById('sleep-sl').value);
+  document.getElementById('sleep-out').textContent = s + ' год';
+  let msg, color;
+  if (s >= 8) { msg = 'Оптимальний відпочинок. Когнітивні функції повні.'; color = 'var(--green)'; }
+  else if (s >= 7) { msg = 'Легка нестача. Незначне зниження концентрації.'; color = 'var(--teal)'; }
+  else if (s >= 6) { msg = 'Помітна нестача. Після 2 тижнів — як 48 год без сну (дослідження). Людина це НЕ відчуває.'; color = 'var(--amber)'; }
+  else if (s >= 4) { msg = 'Критична нестача. Стабілізація на зниженому рівні. Ухвалення рішень погіршується. Рівень — «алкогольне сп\'яніння».'; color = 'var(--amber)'; }
+  else { msg = 'Катастрофічна декомпенсація. Здібності продовжують падати без стабілізації. Небезпечно поряд з реактором чи ракетами.'; color = 'var(--red)'; }
+  document.getElementById('sleep-result').innerHTML = `<span style="color:${color}">${msg}</span>`;
+}
+
+// Init
+calcHeat();
+calcSleep();
+</script>
+</body>
+</html>
