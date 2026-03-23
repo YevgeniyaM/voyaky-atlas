@@ -959,48 +959,132 @@ function drawBlast() {
   const c = document.getElementById('blastCanvas');
   if (!c) return;
   const ctx = c.getContext('2d');
-  c.width = c.offsetWidth * window.devicePixelRatio || 600;
-  c.height = 180 * window.devicePixelRatio;
-  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-  const W = c.offsetWidth || 600, H = 180;
+  const dpr = window.devicePixelRatio || 1;
+  const W = c.offsetWidth || 600;
+  const mobile = W < 520;
+  const H = mobile ? 340 : 180;
+
+  c.width = Math.round(W * dpr);
+  c.height = Math.round(H * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, W, H);
 
-  // Left: flat chassis
-  ctx.fillStyle = '#2a2720';
-  ctx.fillRect(20, 60, 200, 40);
-  ctx.strokeStyle = '#d4a84b';
   ctx.lineWidth = 1.5;
-  ctx.strokeRect(20, 60, 200, 40);
-  ctx.fillStyle = '#a09880';
-  ctx.font = '11px DM Mono, monospace';
-  ctx.fillText('Пласке шасі', 70, 55);
+  ctx.font = mobile ? '10px DM Mono, monospace' : '11px DM Mono, monospace';
 
-  // Arrows up (bad)
-  for (let x = 40; x <= 200; x += 30) {
-    ctx.beginPath(); ctx.strokeStyle = '#c44a3a'; ctx.lineWidth = 2;
-    ctx.moveTo(x, 140); ctx.lineTo(x, 105);
+  if (mobile) {
+    const boxW = Math.min(W - 64, 190);
+    const boxH = 36;
+    const x = Math.max(18, (W - boxW) / 2);
+    const center = x + boxW / 2;
+
+    ctx.textAlign = 'center';
+
+    // Flat chassis (top)
+    const topY = 38;
+    ctx.fillStyle = '#a09880';
+    ctx.fillText('Пласке шасі', center, topY - 10);
+
+    ctx.fillStyle = '#2a2720';
+    ctx.fillRect(x, topY, boxW, boxH);
+    ctx.strokeStyle = '#d4a84b';
+    ctx.strokeRect(x, topY, boxW, boxH);
+
+    const arrowTop = topY + boxH + 10;
+    const arrowBottom = arrowTop + 38;
+    const arrowCount = 5;
+    const spacing = boxW / (arrowCount + 1);
+    for (let i = 1; i <= arrowCount; i++) {
+      const ax = x + spacing * i;
+      ctx.beginPath();
+      ctx.strokeStyle = '#c44a3a';
+      ctx.lineWidth = 2;
+      ctx.moveTo(ax, arrowBottom);
+      ctx.lineTo(ax, arrowTop);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.fillStyle = '#c44a3a';
+      ctx.moveTo(ax, arrowTop - 4);
+      ctx.lineTo(ax - 5, arrowTop + 6);
+      ctx.lineTo(ax + 5, arrowTop + 6);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    ctx.fillStyle = '#c44a3a';
+    ctx.fillText('Вертикальний удар → хребет', center, arrowBottom + 24);
+
+    // V-shaped chassis (bottom), clearly separated
+    const vLabelY = arrowBottom + 56;
+    ctx.fillStyle = '#a09880';
+    ctx.fillText('V-подібне шасі', center, vLabelY);
+
+    const vTopY = vLabelY + 16;
+    const leftX = x + 20;
+    const rightX = x + boxW - 20;
+    const shoulderLeft = center - 34;
+    const shoulderRight = center + 34;
+    const jointY = vTopY + 28;
+    const bottomY = jointY + 34;
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#3a8a7c';
+    ctx.lineWidth = 2;
+    ctx.moveTo(leftX, jointY);
+    ctx.lineTo(shoulderLeft, vTopY);
+    ctx.lineTo(shoulderRight, vTopY);
+    ctx.lineTo(rightX, jointY);
     ctx.stroke();
-    ctx.beginPath(); ctx.fillStyle = '#c44a3a';
-    ctx.moveTo(x, 100); ctx.lineTo(x-5, 110); ctx.lineTo(x+5, 110); ctx.closePath(); ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(center, bottomY);
+    ctx.lineTo(center - 34, jointY + 6);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(center, bottomY);
+    ctx.lineTo(center + 34, jointY + 6);
+    ctx.stroke();
+
+    ctx.fillStyle = '#3a8a7c';
+    ctx.fillText('Енергія відхиляється вбік', center, bottomY + 24);
+
+    ctx.textAlign = 'start';
+  } else {
+    // Left: flat chassis
+    ctx.fillStyle = '#2a2720';
+    ctx.fillRect(20, 60, 200, 40);
+    ctx.strokeStyle = '#d4a84b';
+    ctx.strokeRect(20, 60, 200, 40);
+    ctx.fillStyle = '#a09880';
+    ctx.fillText('Пласке шасі', 70, 55);
+
+    for (let x = 40; x <= 200; x += 30) {
+      ctx.beginPath(); ctx.strokeStyle = '#c44a3a'; ctx.lineWidth = 2;
+      ctx.moveTo(x, 140); ctx.lineTo(x, 105);
+      ctx.stroke();
+      ctx.beginPath(); ctx.fillStyle = '#c44a3a';
+      ctx.moveTo(x, 100); ctx.lineTo(x-5, 110); ctx.lineTo(x+5, 110); ctx.closePath(); ctx.fill();
+    }
+    ctx.fillStyle = '#c44a3a'; ctx.font = '10px DM Mono, monospace';
+    ctx.fillText('Вертикальний удар → хребет', 18, 158);
+
+    // Right: V-shape
+    const rx = Math.max(280, W - 300);
+    ctx.beginPath(); ctx.strokeStyle = '#3a8a7c'; ctx.lineWidth = 2;
+    ctx.moveTo(rx, 100); ctx.lineTo(rx + 50, 60); ctx.lineTo(rx + 150, 60); ctx.lineTo(rx + 200, 100); ctx.stroke();
+    ctx.fillStyle = '#a09880'; ctx.font = '11px DM Mono, monospace';
+    ctx.fillText('V-подібне шасі', rx + 50, 55);
+
+    const midX = rx + 100;
+    ctx.beginPath(); ctx.strokeStyle = '#3a8a7c'; ctx.lineWidth = 2;
+    ctx.moveTo(midX, 140); ctx.lineTo(midX - 40, 105); ctx.stroke();
+    ctx.beginPath(); ctx.strokeStyle = '#3a8a7c'; ctx.lineWidth = 2;
+    ctx.moveTo(midX, 140); ctx.lineTo(midX + 40, 105); ctx.stroke();
+    ctx.fillStyle = '#3a8a7c'; ctx.font = '10px DM Mono, monospace';
+    ctx.fillText('Енергія відхиляється вбік', rx + 10, 158);
   }
-  ctx.fillStyle = '#c44a3a'; ctx.font = '10px DM Mono, monospace';
-  ctx.fillText('Вертикальний удар → хребет', 18, 158);
-
-  // Right: V-shape
-  const rx = 280;
-  ctx.beginPath(); ctx.strokeStyle = '#3a8a7c'; ctx.lineWidth = 2;
-  ctx.moveTo(rx, 100); ctx.lineTo(rx + 50, 60); ctx.lineTo(rx + 150, 60); ctx.lineTo(rx + 200, 100); ctx.stroke();
-  ctx.fillStyle = '#a09880'; ctx.font = '11px DM Mono, monospace';
-  ctx.fillText('V-подібне шасі', rx + 50, 55);
-
-  // Arrows diagonal (good)
-  const midX = rx + 100;
-  ctx.beginPath(); ctx.strokeStyle = '#3a8a7c'; ctx.lineWidth = 2;
-  ctx.moveTo(midX, 140); ctx.lineTo(midX - 40, 105); ctx.stroke();
-  ctx.beginPath(); ctx.strokeStyle = '#3a8a7c'; ctx.lineWidth = 2;
-  ctx.moveTo(midX, 140); ctx.lineTo(midX + 40, 105); ctx.stroke();
-  ctx.fillStyle = '#3a8a7c'; ctx.font = '10px DM Mono, monospace';
-  ctx.fillText('Енергія відхиляється вбік', rx + 10, 158);
 }
 
 // ─── DB bars ───
@@ -1085,6 +1169,16 @@ function calcSleep() {
   else { msg = 'Катастрофічна декомпенсація. Здібності продовжують падати без стабілізації. Небезпечно поряд з реактором чи ракетами.'; color = 'var(--red)'; }
   document.getElementById('sleep-result').innerHTML = `<span style="color:${color}">${msg}</span>`;
 }
+
+window.addEventListener('resize', () => {
+  if (document.getElementById('ch-2')?.classList.contains('active')) drawBlast();
+});
+
+window.addEventListener('orientationchange', () => {
+  setTimeout(() => {
+    if (document.getElementById('ch-2')?.classList.contains('active')) drawBlast();
+  }, 120);
+});
 
 // Init
 calcHeat();
